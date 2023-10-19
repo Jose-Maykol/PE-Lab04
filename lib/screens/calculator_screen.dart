@@ -1,9 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:pe_lab04/colors.dart';
-import 'package:pe_lab04/widgets/button.dart';
+import 'package:pe_lab04/utils/calculator_info.dart';
+import 'package:pe_lab04/widgets/calculator_button.dart';
 
-class CalculatorScreen extends StatelessWidget {
+class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CalculatorScreen> createState() => _CalculatorScreenState();
+}
+
+class _CalculatorScreenState extends State<CalculatorScreen> {
+
+  String primaryDisplay = '0';
+  String secondaryDisplay = '';
+  String operator = '';
+
+  void onDigitPress(String digit) {
+    print(digit);
+    setState(() {
+      if (primaryDisplay == '0') {
+        primaryDisplay = digit;
+      } else {
+        primaryDisplay += digit;
+      }
+    });
+  }
+
+  void onEqualPress() {
+    print('=');
+    var tempDisplay = primaryDisplay;
+    setState(() {
+      if (operator == '÷') {
+        primaryDisplay = (double.parse(secondaryDisplay.substring(0, secondaryDisplay.length - 2)) / double.parse(primaryDisplay)).toString();
+      } else if (operator == '×') {
+        primaryDisplay = (double.parse(secondaryDisplay.substring(0, secondaryDisplay.length - 2)) * double.parse(primaryDisplay)).toString();
+      } else if (operator == '-') {
+        primaryDisplay = (double.parse(secondaryDisplay.substring(0, secondaryDisplay.length - 2)) - double.parse(primaryDisplay)).toString();
+      } else if (operator == '+') {
+        primaryDisplay = (double.parse(secondaryDisplay.substring(0, secondaryDisplay.length - 2)) + double.parse(primaryDisplay)).toString();
+      }
+      secondaryDisplay += '$tempDisplay =';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,23 +56,26 @@ class CalculatorScreen extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.35,
             alignment: Alignment.bottomRight,
             padding: const EdgeInsets.all(16.0),
-            child: const Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '3x2',
-                  style: TextStyle(
+                  secondaryDisplay,
+                  style: const TextStyle(
                     fontSize: 36,
                     color: AppColor.fontSecondary
                   ),
+                  textAlign: TextAlign.right,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
-                  '6',
-                  style: TextStyle(
+                  primaryDisplay,
+                  style: const TextStyle(
                     fontSize: 80,
                     color: AppColor.fontPrimary
                   ),
+                  textAlign: TextAlign.right,
                 ),
               ],
             )
@@ -43,82 +85,79 @@ class CalculatorScreen extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.65,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: GridView.count(
-                crossAxisCount: 4,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ), 
                 physics: const NeverScrollableScrollPhysics(),
-                children: const [
-                  Button(
-                    text: 'CE',
-                    color: AppColor.primary,
-                  ),
-                  Button(
-                    text: 'C',
-                    color: AppColor.primary,
-                  ),
-                  Button(
-                    text: '%',
-                    color: AppColor.secondary,
-                  ),
-                  Button(
-                    text: '÷',
-                    color: AppColor.secondary,
-                  ),
-                  Button(
-                    text: '7',
-                  ),
-                  Button(
-                    text: '8',
-                  ),
-                  Button(
-                    text: '9',
-                  ),
-                  Button(
-                    text: '×',
-                    color: AppColor.secondary,
-                  ),
-                  Button(
-                    text: '4',
-                  ),
-                  Button(
-                    text: '5',
-                  ),
-                  Button(
-                    text: '6',
-                  ),
-                  Button(
-                    text: '-',
-                    color: AppColor.secondary,
-                  ),
-                  Button(
-                    text: '1',
-                  ),
-                  Button(
-                    text: '2',
-                  ),
-                  Button(
-                    text: '3',
-                  ),
-                  Button(
-                    text: '+',
-                    color: AppColor.secondary,
-                  ),
-                  Button(
-                    text: '⌫',
-                    color: AppColor.primary,
-                  ),
-                  Button(
-                    text: '0',
-                  ),
-                  Button(
-                    text: '.',
-                  ),
-                  Button(
-                    text: '=',
-                    color: AppColor.primary,
-                  ),
-                ],
+                itemBuilder: (context, index) {
+                  final buttonInfo = calculatorInfo[index];
+                  return CalculatorButton(
+                    onPressed: () {
+                      if (buttonInfo.text == 'C') {
+                        setState(() {
+                          primaryDisplay = '0';
+                          secondaryDisplay = '';
+                        });
+                      } else if (buttonInfo.text == 'CE') {
+                        setState(() {
+                          if (secondaryDisplay.endsWith('=')) {
+                            primaryDisplay = '0';
+                            secondaryDisplay = '';
+                          } else {
+                            primaryDisplay = '0';
+                          }
+                        });
+                      } else if (buttonInfo.text == '%') {
+                        setState(() {
+                          primaryDisplay = (double.parse(primaryDisplay) / 100).toString();
+                        });
+                      } else if (buttonInfo.text == '÷') {
+                        setState(() {
+                          secondaryDisplay = '$primaryDisplay ÷ ';
+                          primaryDisplay = '0';
+                          operator = '÷';
+                        });
+                      } else if (buttonInfo.text == '×') {
+                        setState(() {
+                          secondaryDisplay = '$primaryDisplay × ';
+                          primaryDisplay = '0';
+                          operator = '×';
+                        });
+                      } else if (buttonInfo.text == '-') {
+                        setState(() {
+                          secondaryDisplay = '$primaryDisplay - ';
+                          primaryDisplay = '0';
+                          operator = '-';
+                        });
+                      } else if (buttonInfo.text == '+') {
+                        setState(() {
+                          secondaryDisplay = '$primaryDisplay + ';
+                          primaryDisplay = '0';
+                          operator = '+';
+                        });
+                      } 
+                      else if (buttonInfo.text == '⌫') {
+                        setState(() {
+                          primaryDisplay = primaryDisplay.substring(0, primaryDisplay.length - 1);
+                        });
+                      } else if (buttonInfo.text == '.') {
+                        setState(() {
+                          primaryDisplay += '.';
+                        });
+                      } else if (buttonInfo.text == '=') {
+                        onEqualPress();
+                      } else {
+                        onDigitPress(buttonInfo.text);
+                      }
+                    }, 
+                    text: buttonInfo.text,
+                    color: buttonInfo.color,
+                  );
+                },
+                itemCount: calculatorInfo.length,
               ),
             ),
           )

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:pe_lab04/colors.dart';
 
-class Button extends StatelessWidget {
-  const Button({
+class CalculatorButton extends StatelessWidget {
+  const CalculatorButton({
     super.key,
+    required this.onPressed,
     required this.text,
     this.color,
   });
 
   final String text;
   final Color? color;
+  final Function onPressed;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: AppColor.secondary,
-      onTap: () => {
-        print(text)
-      },
+      onTap: () => onPressed(),
       child: Ink(
         decoration: BoxDecoration(
           color: color ?? AppColor.surface,
