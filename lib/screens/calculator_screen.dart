@@ -17,21 +17,54 @@ class CalculatorScreen extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.35,
             alignment: Alignment.bottomRight,
             padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'display',
-              style: TextStyle(fontSize: 24),
-            ),
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  '3x2',
+                  style: TextStyle(
+                    fontSize: 36,
+                    color: AppColor.fontSecondary
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  '6',
+                  style: TextStyle(
+                    fontSize: 80,
+                    color: AppColor.fontPrimary
+                  ),
+                ),
+              ],
+            )
           ),
           SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.5,
+            height: MediaQuery.of(context).size.height * 0.65,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: GridView.count(
                 crossAxisCount: 4,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
+                physics: const NeverScrollableScrollPhysics(),
                 children: const [
+                  Button(
+                    text: 'CE',
+                    color: AppColor.primary,
+                  ),
+                  Button(
+                    text: 'C',
+                    color: AppColor.primary,
+                  ),
+                  Button(
+                    text: '%',
+                    color: AppColor.secondary,
+                  ),
+                  Button(
+                    text: '÷',
+                    color: AppColor.secondary,
+                  ),
                   Button(
                     text: '7',
                   ),
@@ -42,7 +75,7 @@ class CalculatorScreen extends StatelessWidget {
                     text: '9',
                   ),
                   Button(
-                    text: '÷',
+                    text: '×',
                     color: AppColor.secondary,
                   ),
                   Button(
@@ -55,7 +88,7 @@ class CalculatorScreen extends StatelessWidget {
                     text: '6',
                   ),
                   Button(
-                    text: '×',
+                    text: '-',
                     color: AppColor.secondary,
                   ),
                   Button(
@@ -68,7 +101,7 @@ class CalculatorScreen extends StatelessWidget {
                     text: '3',
                   ),
                   Button(
-                    text: '-',
+                    text: '+',
                     color: AppColor.secondary,
                   ),
                   Button(
