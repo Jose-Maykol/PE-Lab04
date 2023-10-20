@@ -30,7 +30,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     // print('=');
     var tempDisplay = primaryDisplay;
 
-    if (operator != '=' && primaryDisplay != '0') {
+    if (operator != '' && primaryDisplay != '0') {
       var firstOperand = double.parse(
           secondaryDisplay.substring(0, secondaryDisplay.length - 2));
       var secondOperand = double.parse(primaryDisplay);
@@ -67,6 +67,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       setState(() {
         primaryDisplay = result;
         secondaryDisplay += '$tempDisplay =';
+        operator = '';
       });
     }
   }
@@ -120,12 +121,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         setState(() {
                           primaryDisplay = '0';
                           secondaryDisplay = '';
+                          operator = '';
                         });
+
                       } else if (buttonInfo.text == 'CE') {
                         setState(() {
                           if (secondaryDisplay.endsWith('=')) {
                             primaryDisplay = '0';
                             secondaryDisplay = '';
+                            operator = '';
                           } else {
                             primaryDisplay = '0';
                           }
