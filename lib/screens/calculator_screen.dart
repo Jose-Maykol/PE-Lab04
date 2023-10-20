@@ -78,29 +78,42 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         backgroundColor: AppColor.background,
         body: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
           Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.35,
-              alignment: Alignment.bottomRight,
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.35,
+            alignment: Alignment.bottomRight,
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  reverse: true,
+                  child: Text(
                     secondaryDisplay,
                     style: const TextStyle(
-                        fontSize: 36, color: AppColor.fontSecondary),
+                      fontSize: 36,
+                      color: AppColor.fontSecondary,
+                    ),
                     textAlign: TextAlign.right,
                   ),
-                  const SizedBox(height: 16),
-                  Text(
+                ),
+                const SizedBox(height: 16),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  reverse: true,
+                  child: Text(
                     primaryDisplay,
                     style: const TextStyle(
-                        fontSize: 80, color: AppColor.fontPrimary),
+                      fontSize: 80,
+                      color: AppColor.fontPrimary,
+                    ),
                     textAlign: TextAlign.right,
                   ),
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.65,
@@ -123,7 +136,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                           secondaryDisplay = '';
                           operator = '';
                         });
-
                       } else if (buttonInfo.text == 'CE') {
                         setState(() {
                           if (secondaryDisplay.endsWith('=')) {
