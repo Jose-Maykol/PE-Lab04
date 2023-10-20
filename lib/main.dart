@@ -16,3 +16,10 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+/* TODO:
+  * BUG: cuando se calcula por primera vez y se quiere volver a dar al = se bugea
+  * BUG: cuando se borra cuando se ha calculado, se deberia borrar la operación no el resultado
+  * BUG: números se vuelvan mas pequeños mientras mas números se agreguen ya que rompen el layout
+
+ */

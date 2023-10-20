@@ -11,13 +11,12 @@ class CalculatorScreen extends StatefulWidget {
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
-
   String primaryDisplay = '0';
   String secondaryDisplay = '';
   String operator = '';
 
   void onDigitPress(String digit) {
-    print(digit);
+    // print(digit);
     setState(() {
       if (primaryDisplay == '0') {
         primaryDisplay = digit;
@@ -28,58 +27,79 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
   void onEqualPress() {
-    print('=');
+    // print('=');
     var tempDisplay = primaryDisplay;
-    setState(() {
-      if (operator == '÷') {
-        primaryDisplay = (double.parse(secondaryDisplay.substring(0, secondaryDisplay.length - 2)) / double.parse(primaryDisplay)).toString();
-      } else if (operator == '×') {
-        primaryDisplay = (double.parse(secondaryDisplay.substring(0, secondaryDisplay.length - 2)) * double.parse(primaryDisplay)).toString();
-      } else if (operator == '-') {
-        primaryDisplay = (double.parse(secondaryDisplay.substring(0, secondaryDisplay.length - 2)) - double.parse(primaryDisplay)).toString();
-      } else if (operator == '+') {
-        primaryDisplay = (double.parse(secondaryDisplay.substring(0, secondaryDisplay.length - 2)) + double.parse(primaryDisplay)).toString();
+
+    if (operator != '=' && primaryDisplay != '0') {
+      var firstOperand = double.parse(
+          secondaryDisplay.substring(0, secondaryDisplay.length - 2));
+      var secondOperand = double.parse(primaryDisplay);
+      double preResult;
+      String result = '';
+
+      switch (operator) {
+        case '÷':
+          preResult = firstOperand / secondOperand;
+          result = preResult == preResult.toInt()
+              ? preResult.toInt().toString()
+              : preResult.toStringAsFixed(5);
+          break;
+        case '×':
+          preResult = firstOperand * secondOperand;
+          result =
+              (preResult == preResult.toInt() ? preResult.toInt() : preResult)
+                  .toString();
+          break;
+        case '-':
+          preResult = firstOperand - secondOperand;
+          result =
+              (preResult == preResult.toInt() ? preResult.toInt() : preResult)
+                  .toString();
+          break;
+        case '+':
+          preResult = firstOperand + secondOperand;
+          result =
+              (preResult == preResult.toInt() ? preResult.toInt() : preResult)
+                  .toString();
+          break;
       }
-      secondaryDisplay += '$tempDisplay =';
-    });
+
+      setState(() {
+        primaryDisplay = result;
+        secondaryDisplay += '$tempDisplay =';
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.background,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
+        backgroundColor: AppColor.background,
+        body: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
           Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.35,
-            alignment: Alignment.bottomRight,
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  secondaryDisplay,
-                  style: const TextStyle(
-                    fontSize: 36,
-                    color: AppColor.fontSecondary
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.35,
+              alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    secondaryDisplay,
+                    style: const TextStyle(
+                        fontSize: 36, color: AppColor.fontSecondary),
+                    textAlign: TextAlign.right,
                   ),
-                  textAlign: TextAlign.right,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  primaryDisplay,
-                  style: const TextStyle(
-                    fontSize: 80,
-                    color: AppColor.fontPrimary
+                  const SizedBox(height: 16),
+                  Text(
+                    primaryDisplay,
+                    style: const TextStyle(
+                        fontSize: 80, color: AppColor.fontPrimary),
+                    textAlign: TextAlign.right,
                   ),
-                  textAlign: TextAlign.right,
-                ),
-              ],
-            )
-          ),
+                ],
+              )),
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.65,
@@ -90,7 +110,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                   crossAxisCount: 4,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
-                ), 
+                ),
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   final buttonInfo = calculatorInfo[index];
@@ -112,7 +132,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         });
                       } else if (buttonInfo.text == '%') {
                         setState(() {
-                          primaryDisplay = (double.parse(primaryDisplay) / 100).toString();
+                          primaryDisplay =
+                              (double.parse(primaryDisplay) / 100).toString();
                         });
                       } else if (buttonInfo.text == '÷') {
                         setState(() {
@@ -138,10 +159,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                           primaryDisplay = '0';
                           operator = '+';
                         });
-                      } 
-                      else if (buttonInfo.text == '⌫') {
+                      } else if (buttonInfo.text == '⌫') {
                         setState(() {
-                          primaryDisplay = primaryDisplay.substring(0, primaryDisplay.length - 1);
+                          primaryDisplay = primaryDisplay.substring(
+                              0, primaryDisplay.length - 1);
                         });
                       } else if (buttonInfo.text == '.') {
                         setState(() {
@@ -152,7 +173,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       } else {
                         onDigitPress(buttonInfo.text);
                       }
-                    }, 
+                    },
                     text: buttonInfo.text,
                     color: buttonInfo.color,
                   );
@@ -161,8 +182,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               ),
             ),
           )
-        ]
-      )
-    );
+        ]));
   }
 }
