@@ -161,8 +161,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         });
                       } else if (buttonInfo.text == '⌫') {
                         setState(() {
-                          primaryDisplay = primaryDisplay.substring(
-                              0, primaryDisplay.length - 1);
+                          if (primaryDisplay.isNotEmpty) {
+                            primaryDisplay = primaryDisplay.substring(
+                                0, primaryDisplay.length - 1);
+                            if (primaryDisplay.isEmpty) {
+                              primaryDisplay = '0';
+                            }
+                          }
                         });
                       } else if (buttonInfo.text == '.') {
                         setState(() {
