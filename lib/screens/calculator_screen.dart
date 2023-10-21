@@ -16,7 +16,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   String operator = '';
 
   void onDigitPress(String digit) {
-    // print(digit);
     setState(() {
       if (primaryDisplay == '0') {
         primaryDisplay = digit;
@@ -27,13 +26,18 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
   void onEqualPress() {
-    // print('=');
-    var tempDisplay = primaryDisplay;
-
-    if (operator != '' && primaryDisplay != '0') {
-      var firstOperand = double.parse(
-          secondaryDisplay.substring(0, secondaryDisplay.length - 2));
-      var secondOperand = double.parse(primaryDisplay);
+    double firstOperand;
+    double secondOperand;
+    RegExp mathOperationRegex = RegExp(r'[+-]?\d+(\.\d+)? [+\-×÷] [+-]?\d+(\.\d+)? =');
+    if (mathOperationRegex.hasMatch(secondaryDisplay)) {
+        List<String> operands = secondaryDisplay.split(RegExp(r'[+\-×÷]'));
+        firstOperand = double.parse(primaryDisplay);
+        secondOperand = double.parse(operands[1].replaceAll("=", "").trim());
+    } else {
+      firstOperand = double.parse(secondaryDisplay.substring(0, secondaryDisplay.length - 2));
+      secondOperand = double.parse(primaryDisplay);
+    }
+    if (operator.isNotEmpty && primaryDisplay != '0') {  
       double preResult;
       String result = '';
 
@@ -46,28 +50,21 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           break;
         case '×':
           preResult = firstOperand * secondOperand;
-          result =
-              (preResult == preResult.toInt() ? preResult.toInt() : preResult)
-                  .toString();
+          result = (preResult == preResult.toInt() ? preResult.toInt() : preResult).toString();
           break;
         case '-':
           preResult = firstOperand - secondOperand;
-          result =
-              (preResult == preResult.toInt() ? preResult.toInt() : preResult)
-                  .toString();
+          result = (preResult == preResult.toInt() ? preResult.toInt() : preResult).toString();
           break;
         case '+':
           preResult = firstOperand + secondOperand;
-          result =
-              (preResult == preResult.toInt() ? preResult.toInt() : preResult)
-                  .toString();
+          result = (preResult == preResult.toInt() ? preResult.toInt() : preResult).toString();
           break;
       }
 
       setState(() {
         primaryDisplay = result;
-        secondaryDisplay += '$tempDisplay =';
-        operator = '';
+        secondaryDisplay = '$firstOperand $operator $secondOperand =';
       });
     }
   }
@@ -148,8 +145,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         });
                       } else if (buttonInfo.text == '%') {
                         setState(() {
-                          primaryDisplay =
-                              (double.parse(primaryDisplay) / 100).toString();
+                          primaryDisplay = (double.parse(primaryDisplay) / 100).toString();
                         });
                       } else if (buttonInfo.text == '÷') {
                         setState(() {
@@ -178,8 +174,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                       } else if (buttonInfo.text == '⌫') {
                         setState(() {
                           if (primaryDisplay.isNotEmpty) {
-                            primaryDisplay = primaryDisplay.substring(
-                                0, primaryDisplay.length - 1);
+                            primaryDisplay = primaryDisplay.substring(0, primaryDisplay.length - 1);
                             if (primaryDisplay.isEmpty) {
                               primaryDisplay = '0';
                             }
@@ -203,6 +198,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               ),
             ),
           )
-        ]));
+        ]
+      )
+    );
   }
 }
