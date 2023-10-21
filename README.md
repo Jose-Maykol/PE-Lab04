@@ -1,16 +1,20 @@
-# pe_lab04
+# Emerging Platforms - Laboratory 04
 
-A new Flutter project.
+## Team
 
-## Getting Started
+- Paniura Huamaní, José Maykol 
+- Turpo Coila, Alex Ronaldo
 
-This project is a starting point for a Flutter application.
+## Description
+Implement a calculator with four operations (addition, subtraction, multiplication, division). Take
+for reference the image below.
 
-A few resources to get you started if this is your first Flutter project:
+# Demo
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Default**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  ![image](https://github.com/Jose-Maykol/PE-Lab04/assets/64320646/a1a14fe2-289e-4c9f-9f50-73867f5c5904)
+
+- **Operations**
+
+  ![image](https://github.com/Jose-Maykol/PE-Lab04/assets/64320646/77317e37-1c32-4869-8c15-2397bba0f433)
