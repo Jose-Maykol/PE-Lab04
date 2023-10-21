@@ -19,7 +19,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     setState(() {
       if (primaryDisplay == '0') {
         primaryDisplay = digit;
-      } else {
+      } else if (secondaryDisplay.isNotEmpty && secondaryDisplay.endsWith('=')) {
+        primaryDisplay = digit;
+        secondaryDisplay = '';
+      } 
+      else {
         primaryDisplay += digit;
       }
     });
